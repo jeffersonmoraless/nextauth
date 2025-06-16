@@ -1,9 +1,10 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 
 export const api: AxiosInstance = axios.create({
-  baseURL: process.env.API_URL,
+  
+  baseURL: process.env.NEXT_PUBLIC_API_URL
 });
-
+/*
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     // Tipando o parâmetro explicitamente
@@ -18,3 +19,4 @@ api.interceptors.request.use(
     throw error;
   }
 );
+*/

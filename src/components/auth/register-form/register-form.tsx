@@ -1,11 +1,25 @@
 "use client";
 import { api } from "@/lib/api";
-
+import styles from "./Register-form.module.css";
 import { useForm } from "react-hook-form";
 
+interface RegisterFormUser {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
 const RegisterForm = () => {
-  const { handleSubmit, register } = useForm();
-  const signin_up = async (data: object) => {
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<RegisterFormUser>();
+
+
+
+  const signin_up = async (data: RegisterFormUser) => {
     try {
       const response = await api.post("/register", data);
       console.log("Usuário registrado:", response.data);
@@ -20,35 +34,59 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div className="bg-gray-300 min-h-screen flex items-center justify-center">
       <form
         onSubmit={handleSubmit(signin_up)}
-        className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full h-full "
+        className="bg-gray-200 p-8 rounded-lg shadow-lg max-w-md w-full h-full "
       >
-        <h2 className="mb-5 text-2xl text-center">Cadastre-se</h2>
+        <h2 className="mb-5 text-2xl font-bold text-center">Cadastre-se</h2>
+        {errors.name && (
+          <span className={styles.spanMessageError}>{errors.name.message}</span>
+        )}
         <input
           type="text"
-          placeholder="nome"
-          className="bg-blue-200 rounded-lg p-2 w-full mb-3"
-          {...register("name")}
+          placeholder="name"
+          className={`${styles.inputField} ${errors.name ? styles.inputFieldError : ""}`}
+          {...register("name", { required: "This field name is required." })}
         />
-
+        {errors.email && (
+          <span className={styles.spanMessageError}>
+            {errors.email.message}
+          </span>
+        )}
         <input
           type="email"
           placeholder="email"
-          className="bg-blue-200 rounded-lg p-2 w-full mb-3"
-          {...register("email")}
+          className={`${styles.inputField} ${errors.email ? styles.inputFieldError : ""}`}
+          {...register("email", { required: "This field email is required." })}
         />
-
+        {errors.password && (
+          <span className={styles.spanMessageError}>
+            {errors.password.message}
+          </span>
+        )}
         <input
           type="password"
           placeholder="password"
-          className="bg-blue-200 rounded-lg p-2 w-full mb-3"
-          {...register("password")}
+          className={`${styles.inputField} ${errors.password ? styles.inputFieldError : ""}`}
+          {...register("password", { required: "This field password is required." })}
+        />
+        {errors.confirmPassword && (
+          <span className={styles.spanMessageError}>
+            {errors.confirmPassword.message}
+          </span>
+        )}
+        <input
+          type="password"
+          placeholder="confirm password"
+          className={`${styles.inputField} ${errors.confirmPassword ? styles.inputFieldError : ""}`}
+          {...register("confirmPassword", {
+            required: "This field Confirm Password is required.",
+          })}
         />
         <button
           type="submit"
-          className="bg-blue-500 text-white rounded-lg p-2 w-full hover:bg-blue-600 transition duration-200"
+          className={`${styles.btn}`}
         >
           Cadastrar
         </button>

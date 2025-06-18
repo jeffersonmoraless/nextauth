@@ -1,41 +1,67 @@
 "use client";
 import { useForm } from "react-hook-form";
-const LoginForm = () => {
-  const { handleSubmit, register } = useForm();
+import styles from "./Login-form.module.css";
+interface LoginFormUser {
+  email: string;
+  password: string;
+}
 
-  const signin = (data: object) => {
+const LoginForm = () => {
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<LoginFormUser>();
+
+  const sign_in = (data: LoginFormUser) => {
     console.log(data);
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div className="bg-gray-300 min-h-screen flex items-center justify-center">
       <form
-        onSubmit={handleSubmit(signin)}
-        className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full h-full "
+        onSubmit={handleSubmit(sign_in)}
+        className="bg-gray-200 p-8 rounded-lg shadow-lg max-w-md w-full h-full "
       >
-        <h2 className="mb-5 text-2xl text-center font-bold">Login</h2>
-      <label htmlFor="email">Email</label>
+        <h2 className=" text-2xl font-bold text-center pb-2.5 ">Login</h2>
+
+        <span
+          className={`${styles.spanMessageError} ${
+            errors.email ? "visible" : "invisible"
+          }`}
+        >
+          {errors.email ? errors.email.message : "error"}
+        </span>
+
         <input
           type="email"
-          id="email"
-          placeholder="Enter your email"
-          className="bg-blue-200 rounded-lg p-2 w-full mb-3"
-          {...register("email")}
+          placeholder="email"
+          className={`${styles.inputField} ${
+            errors.email ? styles.inputFieldError : ""
+          } `}
+          {...register("email", { required: "This field email is required." })}
         />
 
-        <label htmlFor="password">Password</label>
-        <input
-          placeholder="Enter your password"
-          type="password"
-          id="password"
-          className="bg-blue-200 rounded-lg p-2 w-full mb-3"
-          {...register("password")}
-        />
-        <button
-          type="submit"
-          className="bg-blue-500 font-bold text-white rounded-lg p-2 w-full hover:bg-blue-600 transition duration-200"
+        <span
+          className={`${styles.spanMessageError} ${
+            errors.password ? "visible" : "invisible"
+          }`}
         >
-          Signin
+          {errors.password ? errors.password.message : "error"}
+        </span>
+
+        <input
+          type="password"
+          placeholder="password"
+          className={`${styles.inputField} ${
+            errors.password ? styles.inputFieldError : ""
+          }`}
+          {...register("password", {
+            required: "This field password is required.",
+          })}
+        />
+        <button type="submit" className={`${styles.btn}`}>
+          Sign In
         </button>
       </form>
     </div>
